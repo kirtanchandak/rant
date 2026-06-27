@@ -137,9 +137,18 @@
 }
 
 @layer base {
+  html, body {
+    overscroll-behavior-y: none; /* Prevents pull-to-refresh bounce */
+  }
+
+  /* Prevent accidental text selection on UI elements */
+  button, a {
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   * {
-    @apply border-border outline-ring/50;
-    box-sizing: border-box;
+    @apply border-border;
   }
   html {
     @apply font-sans;
@@ -178,7 +187,7 @@
   font-size: 1.0625rem;
   line-height: 1.8;
   color: var(--foreground);
-  caret-color: oklch(0.28 0.018 55);
+  caret-color: var(--accent); /* Now dynamically updates in dark mode */
   font-family: var(--font-geist-sans);
 }
 .rant-textarea::placeholder {
