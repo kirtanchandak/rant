@@ -81,7 +81,13 @@ export function EntryEditor({ greeting }: { greeting: string }) {
           ref={textareaRef}
           id="entry-editor"
           value={content}
-          onChange={(e) => setContent(e.target.value)}
+          onChange={(e) => {
+            setContent(e.target.value)
+            if (typeof navigator !== 'undefined' && navigator.vibrate) {
+              // Light haptic tap on keystroke for Android/PWA
+              navigator.vibrate(10) 
+            }
+          }}
           onKeyDown={handleKeyDown}
           placeholder="Start writing…"
           className="rant-textarea"

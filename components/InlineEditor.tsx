@@ -58,7 +58,12 @@ export function InlineEditor({
         ref={ref}
         id="inline-editor"
         value={content}
-        onChange={(e) => setContent(e.target.value)}
+        onChange={(e) => {
+          setContent(e.target.value)
+          if (typeof navigator !== 'undefined' && navigator.vibrate) {
+            navigator.vibrate(10)
+          }
+        }}
         onKeyDown={handleKeyDown}
         className="rant-textarea"
         style={{ minHeight: '200px' }}
