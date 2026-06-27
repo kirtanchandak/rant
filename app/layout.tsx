@@ -14,8 +14,15 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: { default: 'Rant', template: '%s · Rant' },
-  description: 'A frictionless daily journal. Open, write, save, leave.',
+  title: { default: 'Rant — Frictionless Journal', template: '%s · Rant' },
+  description: 'Rant is a warm, frictionless daily journal. Open, write, save, leave. Zero distractions, beautiful cream aesthetic.',
+  keywords: ['journaling', 'notes', 'private thoughts', 'minimalist journal', 'writing app', 'rant', 'personal data'],
+  authors: [{ name: 'Kirtan' }],
+  creator: 'Kirtan',
+  robots: {
+    index: false,
+    follow: false,
+  },
 }
 
 export default function RootLayout({

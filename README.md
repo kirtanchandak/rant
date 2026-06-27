@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🍻 Rant
 
-## Getting Started
+A private, minimalist, and frictionless web application for dumping thoughts throughout the day. Designed for a quick "open, write, save, leave" flow with a warm cream/parchment aesthetic.
 
-First, run the development server:
+---
+
+## ✨ Features
+
+- **Parchment/Cream UI Theme** — Soft on the eyes, matching cozy journal apps (with a warm dark-mode alternative).
+- **Auto-focused & Auto-resizing Editor** — Just open and start typing immediately.
+- **Auto-save** — Automatically saves a backup every 5 seconds if you stop typing.
+- **Keyboard Shortcuts** — Save quickly using `Cmd/Ctrl + Enter`.
+- **Date-grouped Timeline** — Review all entries in reverse chronological order grouped by Today, Yesterday, or specific dates.
+- **Responsive Monthly Calendar** — Days with entries show a small dot indicator. Click any date to list entries for that day.
+- **Instant Search** — Full-text web-search (Supabase index powered) highlighting exact matches in real-time.
+- **Secure Authentication** — Passwordless magic link authentication via Supabase.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 16 (App Router & Proxy)
+- **Styling**: Tailwind CSS v4 + shadcn/ui (Sonner toasts & Lucide icons)
+- **Theme**: `next-themes` (Warm Cream / Warm Dark Mode)
+- **Database & Auth**: Supabase (PostgreSQL + Magic Link GoTrue Auth)
+
+---
+
+## 🚀 Getting Started
+
+### 1. Environment Configuration
+
+Clone `.env.local.example` to `.env.local` in the project root:
+
+```bash
+cp .env.local.example .env.local
+```
+
+Fill in your Supabase variables:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+```
+
+### 2. Database Setup
+
+Paste the SQL schema from [db/schema.sql](file:///Users/kirtanchandak/developer/personal/rant/db/schema.sql) directly into your Supabase **SQL Editor** and run it. This creates the `entries` table, configures row-level security (RLS), and sets up the full-text search indexes.
+
+### 3. Supabase Auth Configuration
+
+Go to your Supabase Dashboard under **Authentication -> URL Configuration**:
+- **Site URL**: `http://localhost:3000`
+- **Redirect URLs**: Add `http://localhost:3000/auth/callback`
+
+### 4. Running Locally
+
+Install the dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to see Rant in action.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📂 Project Structure
 
-## Learn More
+```
+app/
+  (app)/              # Auth-protected pages (Home/Write, Timeline, Calendar, Search)
+  (auth)/             # Login page
+  api/                # Search endpoint
+  actions/            # Server actions for mutations & auth
+components/           # Reusable UI components & layouts
+db/                   # Database schemas
+hooks/                # Custom utility hooks
+lib/                  # Supabase clients & configuration helpers
+proxy.ts              # Route protection middleware (Next.js 16)
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📖 Definition of Done (V1)
+- [x] Passwordless Magic Link authentication
+- [x] Frictionless writing under 10 seconds
+- [x] Timeline view with grouping and options to edit/delete
+- [x] Live search across entries
+- [x] Monthly calendar browsing
+- [x] Responsive layout & togglable warm themes
