@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/ThemeProvider'
+import NextTopLoader from 'nextjs-toploader'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -48,6 +49,18 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body>
+        <NextTopLoader
+          color="oklch(0.55 0.08 55)"
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={2}
+          crawl={true}
+          showSpinner={false}
+          easing="ease"
+          speed={200}
+          shadow={false}
+          zIndex={9999}
+        />
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
