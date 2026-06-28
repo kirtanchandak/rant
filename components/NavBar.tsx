@@ -4,40 +4,25 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { signOut } from '@/app/actions/entries'
 import { useTransition, useState } from 'react'
-import { useTheme } from 'next-themes'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import {
   PenLine,
   ScrollText,
   CalendarDays,
   Search,
-  Sun,
-  Moon,
   LogOut,
   Menu,
   X,
 } from 'lucide-react'
 
 const navLinks = [
-  { href: '/',          label: 'Write',    icon: PenLine,      key: 'write' },
+  { href: '/write',          label: 'Write',    icon: PenLine,      key: 'write' },
   { href: '/timeline',  label: 'Timeline', icon: ScrollText,   key: 'timeline' },
   { href: '/calendar',  label: 'Calendar', icon: CalendarDays, key: 'calendar' },
   { href: '/search',    label: 'Search',   icon: Search,       key: 'search' },
 ]
 
-function ThemeToggle() {
-  const { theme, setTheme } = useTheme()
-  return (
-    <button
-      id="theme-toggle-btn"
-      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      aria-label="Toggle theme"
-      className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
-    >
-      <Sun className="size-4 hidden dark:block" />
-      <Moon className="size-4 block dark:hidden" />
-    </button>
-  )
-}
+
 
 export function NavBar({ userName }: { userName: string }) {
   const pathname = usePathname()

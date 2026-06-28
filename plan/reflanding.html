@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>rant — write your thoughts, remember everything</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --black: #0a0a0a;
+  --surface: #111111;
+  --surface2: #1a1a1a;
+  --border-dark: #222222;
+  --text: #e8e8e8;
+  --muted: #666666;
+  --muted2: #444444;
+  --accent: #ff4d00;
+  --accent-dim: rgba(255,77,0,0.12);
+  --white: #ffffff;
+  /* light zone */
+  --lbg: #eef0f6;
+  --lborder: #dde0ea;
+  --ltext: #0d0d0d;
+  --lmuted: #6b7280;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',sans-serif; font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased; background:var(--black); }
+
+/* ── NAV (light) ── */
+nav {
+  position:sticky; top:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px 48px;
+  background:rgba(238,240,246,0.88);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--lborder);
+}
+.logo { font-family:'DM Serif Display',serif; font-size:20px; color:var(--ltext); text-decoration:none; }
+.nav-links { display:flex; align-items:center; gap:32px; list-style:none; }
+.nav-links a { color:var(--lmuted); text-decoration:none; font-size:14px; transition:color .2s; }
+.nav-links a:hover { color:var(--ltext); }
+.nav-cta { background:#111 !important; color:#fff !important; padding:8px 18px; border-radius:8px; font-weight:500 !important; font-size:13px !important; }
+
+/* ── HERO ZONE (light) ── */
+.hero-zone {
+  background:var(--lbg);
+  background-image:radial-gradient(circle at 1px 1px, #c8ccd8 1px, transparent 0);
+  background-size:26px 26px;
+}
+
+.hero {
+  max-width:900px; margin:0 auto;
+  padding:100px 24px 72px;
+  text-align:center;
+}
+
+.hero h1 {
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(44px,6.5vw,82px);
+  font-weight:400;
+  line-height:1.05;
+  letter-spacing:-0.02em;
+  color:var(--ltext);
+  margin-bottom:20px;
+}
+
+.hero h1 .hl {
+  display:inline;
+  background:rgba(255,77,0,0.15);
+  border-radius:6px;
+  padding:0 8px 2px;
+  color:var(--accent);
+  font-style:italic;
+}
+
+.hero-sub {
+  font-size:18px;
+  color:var(--lmuted);
+  max-width:420px;
+  margin:0 auto 36px;
+  font-weight:400;
+  line-height:1.65;
+}
+
+.hero-btns {
+  display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap;
+}
+
+.btn-dark {
+  background:#111; color:#fff;
+  padding:13px 24px; border-radius:9px;
+  font-weight:600; font-size:15px; text-decoration:none;
+  display:flex; align-items:center; gap:8px;
+  transition:opacity .2s;
+}
+.btn-dark:hover { opacity:.82; }
+
+.btn-outline {
+  background:#fff; color:#111;
+  padding:13px 24px; border-radius:9px;
+  font-weight:500; font-size:15px; text-decoration:none;
+  border:1px solid var(--lborder);
+  transition:border-color .2s;
+}
+.btn-outline:hover { border-color:#aaa; }
+
+/* logos strip */
+.logos-strip {
+  padding:40px 24px 20px;
+  text-align:center;
+}
+.logos-label {
+  font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--lmuted); margin-bottom:20px; font-weight:500;
+}
+.logos-row {
+  display:flex; align-items:center; justify-content:center;
+  gap:8px; flex-wrap:wrap;
+}
+.logo-pill {
+  background:#fff;
+  border:1px solid var(--lborder);
+  border-radius:50px;
+  padding:8px 20px;
+  font-size:13px; font-weight:500;
+  color:#444;
+  display:flex; align-items:center; gap:7px;
+}
+.logo-pill span { font-size:16px; }
+
+/* trust + divider */
+.trust-bar {
+  display:flex; align-items:center; justify-content:center; gap:32px;
+  padding:20px 24px 36px;
+  flex-wrap:wrap;
+}
+.trust-item {
+  display:flex; align-items:center; gap:8px;
+  font-size:13px; font-weight:500; color:var(--lmuted);
+}
+.trust-icon { font-size:15px; }
+
+/* stats row */
+.stats-bar {
+  border-top:1px solid var(--lborder);
+  display:flex;
+  justify-content:center;
+}
+.stat {
+  flex:1; max-width:220px;
+  text-align:center;
+  padding:32px 20px;
+  border-right:1px solid var(--lborder);
+}
+.stat:last-child { border-right:none; }
+.stat-num {
+  font-family:'DM Serif Display',serif;
+  font-size:36px; font-weight:400;
+  color:var(--ltext); letter-spacing:-0.02em;
+}
+.stat-label {
+  font-size:12px; color:var(--lmuted); margin-top:4px; font-weight:400;
+  text-transform:uppercase; letter-spacing:.08em;
+}
+
+/* ── DARK ZONE ── */
+.dark-zone { background:var(--black); }
+
+/* section base */
+.section { max-width:1080px; margin:0 auto; padding:100px 24px; }
+.section-label {
+  font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:500;
+  letter-spacing:.18em; text-transform:uppercase; color:var(--accent); margin-bottom:18px;
+}
+.section-title {
+  font-family:'DM Serif Display',serif; font-size:clamp(32px,4vw,52px);
+  font-weight:400; line-height:1.1; color:var(--white); margin-bottom:14px;
+}
+.section-body { font-size:17px; color:var(--muted); max-width:520px; line-height:1.75; font-weight:300; }
+
+.divider { height:1px; background:var(--border-dark); max-width:1080px; margin:0 auto; }
+
+/* features grid */
+.features-wrap { max-width:1080px; margin:0 auto; padding:0 24px 100px; }
+.features {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:1px; background:var(--border-dark);
+  border:1px solid var(--border-dark); border-radius:12px; overflow:hidden;
+}
+.fcard { background:var(--black); padding:34px 30px; transition:background .2s; }
+.fcard:hover { background:var(--surface); }
+.fcard-icon { font-size:22px; margin-bottom:16px; display:block; }
+.fcard-name { font-family:'DM Serif Display',serif; font-size:19px; color:var(--white); margin-bottom:8px; font-weight:400; }
+.fcard-desc { font-size:13px; color:var(--muted); line-height:1.65; }
+
+/* memory visual */
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:center; }
+.memory-visual {
+  background:var(--surface); border:1px solid var(--border-dark);
+  border-radius:12px; padding:24px;
+  font-family:'JetBrains Mono',monospace; font-size:12px; line-height:2;
+}
+.mv-entry { display:flex; gap:10px; align-items:center; padding:9px 0; border-bottom:1px solid var(--border-dark); color:var(--muted); }
+.mv-entry:last-child { border-bottom:none; }
+.mv-time { color:var(--muted2); min-width:66px; font-size:11px; }
+.mv-text { flex:1; }
+.mv-tag { font-size:9px; background:var(--accent-dim); color:var(--accent); padding:2px 8px; border-radius:4px; white-space:nowrap; }
+
+/* chat */
+.chat-window { background:var(--surface); border:1px solid var(--border-dark); border-radius:12px; overflow:hidden; }
+.chat-header { padding:14px 20px; border-bottom:1px solid var(--border-dark); font-size:13px; color:var(--muted); }
+.chat-messages { padding:20px; display:flex; flex-direction:column; gap:12px; }
+.cmsg { max-width:88%; font-size:13px; line-height:1.6; padding:10px 14px; border-radius:10px; }
+.cmsg.user { background:var(--surface2); color:var(--text); align-self:flex-end; border-radius:10px 10px 2px 10px; }
+.cmsg.ai { background:var(--accent-dim); color:var(--text); align-self:flex-start; border-radius:10px 10px 10px 2px; border:1px solid rgba(255,77,0,0.15); }
+.chat-bar { padding:12px 20px; border-top:1px solid var(--border-dark); display:flex; align-items:center; gap:10px; }
+.chat-fake { flex:1; font-size:12px; color:var(--muted2); }
+.chat-send { width:28px; height:28px; background:var(--accent); border-radius:6px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; }
+
+/* mood */
+.mood-section { background:var(--surface); border-top:1px solid var(--border-dark); border-bottom:1px solid var(--border-dark); padding:80px 24px; }
+.mood-inner { max-width:1080px; margin:0 auto; }
+.mood-bars { display:flex; gap:5px; margin-top:44px; align-items:flex-end; height:72px; }
+.mbar { flex:1; border-radius:3px 3px 0 0; cursor:pointer; }
+.mbar.great { background:#27c93f; }
+.mbar.good  { background:#4a9eff; }
+.mbar.meh   { background:#ffbd2e; }
+.mbar.rough { background:#ff4d00; }
+.mood-legend { display:flex; gap:20px; margin-top:14px; }
+.ml { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--muted); }
+.ml-dot { width:10px; height:10px; border-radius:2px; }
+
+/* pricing */
+.pricing { max-width:1080px; margin:0 auto; padding:100px 24px; text-align:center; }
+.pcards { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border-dark); border:1px solid var(--border-dark); border-radius:14px; overflow:hidden; margin-top:52px; text-align:left; }
+.pcard { background:var(--black); padding:38px 32px; }
+.pcard.featured { background:var(--surface); }
+.pbadge { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.15em; text-transform:uppercase; color:var(--accent); background:var(--accent-dim); padding:3px 9px; border-radius:4px; display:inline-block; margin-bottom:22px; }
+.pname { font-family:'DM Serif Display',serif; font-size:24px; color:var(--white); margin-bottom:4px; font-weight:400; }
+.pprice { font-size:34px; font-weight:600; color:var(--white); margin:18px 0 4px; letter-spacing:-0.02em; }
+.pprice span { font-size:14px; font-weight:400; color:var(--muted); }
+.pdesc { font-size:13px; color:var(--muted); margin-bottom:24px; line-height:1.6; }
+.pfeats { list-style:none; display:flex; flex-direction:column; gap:9px; margin-bottom:32px; }
+.pfeats li { font-size:13px; color:var(--muted); display:flex; gap:8px; }
+.pfeats li::before { content:'✓'; color:var(--accent); font-weight:700; flex-shrink:0; }
+.pbtn { display:block; text-align:center; padding:11px; border-radius:7px; font-size:13px; font-weight:500; text-decoration:none; transition:opacity .2s; }
+.pbtn.primary { background:var(--white); color:var(--black); }
+.pbtn.ghost { border:1px solid var(--border-dark); color:var(--muted); }
+.pbtn:hover { opacity:.8; }
+
+/* cta */
+.cta { max-width:1080px; margin:0 auto; padding:100px 24px; text-align:center; }
+.cta h2 { font-family:'DM Serif Display',serif; font-size:clamp(38px,5vw,64px); color:var(--white); line-height:1.1; margin-bottom:18px; }
+.cta p { font-size:17px; color:var(--muted); margin-bottom:36px; font-weight:300; }
+
+.btn-white { background:var(--white); color:var(--black); padding:14px 28px; border-radius:8px; font-weight:600; font-size:15px; text-decoration:none; transition:opacity .2s; }
+.btn-white:hover { opacity:.88; }
+
+/* footer */
+footer { border-top:1px solid var(--border-dark); padding:36px 48px; display:flex; align-items:center; justify-content:space-between; }
+.footer-logo { font-family:'DM Serif Display',serif; font-size:18px; color:var(--muted2); }
+.footer-links { display:flex; gap:24px; list-style:none; }
+.footer-links a { font-size:13px; color:var(--muted2); text-decoration:none; transition:color .2s; }
+.footer-links a:hover { color:var(--muted); }
+
+/* fade */
+.fade-in { opacity:0; transform:translateY(20px); transition:opacity .6s ease, transform .6s ease; }
+.fade-in.visible { opacity:1; transform:translateY(0); }
+
+@media(max-width:768px){
+  nav { padding:14px 20px; }
+  .nav-links { display:none; }
+  .features { grid-template-columns:1fr; }
+  .pcards { grid-template-columns:1fr; }
+  .two-col { grid-template-columns:1fr; gap:36px; }
+  .stats-bar { flex-wrap:wrap; }
+  footer { flex-direction:column; gap:16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── LIGHT ZONE ── -->
+<div class="hero-zone">
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="logo">🤬 rant</a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#ask">Ask your journal</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#" class="nav-cta">Start free</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>The journal that<br>actually <span class="hl">remembers</span> you.</h1>
+    <p class="hero-sub">Write freely. Your journal builds a searchable memory of your life — people, ideas, moods, goals — automatically.</p>
+    <div class="hero-btns">
+      <a href="#" class="btn-dark">Start writing free →</a>
+      <a href="#features" class="btn-outline">How it works</a>
+    </div>
+  </div>
+
+  <!-- LOGOS -->
+  <div class="logos-strip">
+    <div class="logos-label">Tracks everything you write about</div>
+    <div class="logos-row">
+      <div class="logo-pill"><span>👤</span> People</div>
+      <div class="logo-pill"><span>💡</span> Ideas</div>
+      <div class="logo-pill"><span>🎯</span> Goals</div>
+      <div class="logo-pill"><span>😊</span> Moods</div>
+      <div class="logo-pill"><span>🛠️</span> Projects</div>
+      <div class="logo-pill"><span>📸</span> Images</div>
+      <div class="logo-pill"><span>🔄</span> Patterns</div>
+    </div>
+  </div>
+
+  <!-- TRUST -->
+  <div class="trust-bar">
+    <div class="trust-item"><span class="trust-icon">✍️</span> Write anything, no templates</div>
+    <div class="trust-item"><span class="trust-icon">🔒</span> Private by default</div>
+    <div class="trust-item"><span class="trust-icon">⚡</span> AI that works quietly in the background</div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-num">∞</div>
+      <div class="stat-label">Entries you can write</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">24h</div>
+      <div class="stat-label">Memory processing</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Your data, always</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">0</div>
+      <div class="stat-label">Organising required</div>
+    </div>
+  </div>
+
+</div>
+<!-- ── END LIGHT ZONE ── -->
+
+<!-- ── DARK ZONE ── -->
+<div class="dark-zone">
+
+  <!-- FEATURES INTRO -->
+  <div class="section fade-in" id="features">
+    <div class="section-label">What rant does</div>
+    <h2 class="section-title">Not another journaling app.<br>A personal intelligence system.</h2>
+    <p class="section-body">Most journals are write-only. Rant reads back. Every entry feeds a memory layer that connects people, projects, ideas, and moods — so your past self can actually help your present self.</p>
+  </div>
+
+  <div class="features-wrap fade-in">
+    <div class="features">
+      <div class="fcard"><span class="fcard-icon">🧠</span><div class="fcard-name">Memory layer</div><p class="fcard-desc">Remembers people, projects, habits, and ideas. Connects related entries across weeks and months. Never loses context.</p></div>
+      <div class="fcard"><span class="fcard-icon">💬</span><div class="fcard-name">Ask your journal</div><p class="fcard-desc">"What was I working on in March?" Chat naturally with your memories instead of scrolling through hundreds of entries.</p></div>
+      <div class="fcard"><span class="fcard-icon">📈</span><div class="fcard-name">Auto-reviews</div><p class="fcard-desc">Weekly summaries, monthly highlights, quarterly reviews — written automatically. Understand what happened without rereading everything.</p></div>
+      <div class="fcard"><span class="fcard-icon">😊</span><div class="fcard-name">Mood timeline</div><p class="fcard-desc">AI detects emotional patterns over time. Discover what makes you happiest, stressful periods, and burnout signals before they hit.</p></div>
+      <div class="fcard"><span class="fcard-icon">🎯</span><div class="fcard-name">Goal tracking</div><p class="fcard-desc">Mention a goal once. AI tracks progress automatically every time you reference it again — no manual checklists.</p></div>
+      <div class="fcard"><span class="fcard-icon">💡</span><div class="fcard-name">Idea tracking</div><p class="fcard-desc">AI groups similar ideas and tells you which ones resurface, which evolved, and which you've quietly abandoned.</p></div>
+      <div class="fcard"><span class="fcard-icon">🔍</span><div class="fcard-name">Semantic search</div><p class="fcard-desc">Search by meaning, not keywords. Find "the project where I was excited about AI agents" without remembering exact words.</p></div>
+      <div class="fcard"><span class="fcard-icon">📸</span><div class="fcard-name">Images with context</div><p class="fcard-desc">Upload screenshots, whiteboards, photos. AI understands text and images together — your visual memories become searchable.</p></div>
+      <div class="fcard"><span class="fcard-icon">🌙</span><div class="fcard-name">Nightly intelligence</div><p class="fcard-desc">Every night, your journal gets smarter. AI updates memory, themes, goals, mood, projects, and relationships. No manual work.</p></div>
+    </div>
+  </div>
+
+  <!-- MEMORY -->
+  <div class="section fade-in">
+    <div class="two-col">
+      <div>
+        <div class="section-label">Memory layer</div>
+        <h2 class="section-title">Your journal remembers everything.</h2>
+        <p class="section-body">Every entry is understood, tagged, and connected — automatically building a map of your life.</p>
+      </div>
+      <div class="memory-visual">
+        <div class="mv-entry"><span class="mv-time">3 days ago</span><span class="mv-text">Started working on the AI memory layer</span><span class="mv-tag">project</span></div>
+        <div class="mv-entry"><span class="mv-time">1 week ago</span><span class="mv-text">Met Rahul for coffee, he's joining a startup</span><span class="mv-tag">person</span></div>
+        <div class="mv-entry"><span class="mv-time">2 weeks ago</span><span class="mv-text">Feeling burnt out from context switching</span><span class="mv-tag">mood</span></div>
+        <div class="mv-entry"><span class="mv-time">1 month ago</span><span class="mv-text">Had the idea for a journaling app with memory</span><span class="mv-tag">idea</span></div>
+        <div class="mv-entry"><span class="mv-time">2 months ago</span><span class="mv-text">Goal: ship an MVP in 30 days</span><span class="mv-tag">goal</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- CHAT -->
+  <div class="section fade-in" id="ask">
+    <div class="two-col">
+      <div class="chat-window">
+        <div class="chat-header">💬 Ask your journal</div>
+        <div class="chat-messages">
+          <div class="cmsg user">When did I first mention my startup idea?</div>
+          <div class="cmsg ai">2 months ago — right after feeling frustrated that Notion wasn't capturing the right kind of thinking. You've referenced it 14 times since.</div>
+          <div class="cmsg user">Show every time I felt burnt out</div>
+          <div class="cmsg ai">Found 3 entries. Pattern: burnout follows stretches of context switching. The last time was 2 weeks ago after jumping between 4 tasks in one week.</div>
+        </div>
+        <div class="chat-bar">
+          <span class="chat-fake">Ask anything about your life...</span>
+          <div class="chat-send">↑</div>
+        </div>
+      </div>
+      <div>
+        <div class="section-label">Ask your journal</div>
+        <h2 class="section-title">Talk to your past self.</h2>
+        <p class="section-body">Your journal has context you've forgotten. Ask it anything — answers grounded in what you actually wrote.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOOD -->
+  <div class="mood-section">
+    <div class="mood-inner fade-in">
+      <div class="section-label">Mood timeline</div>
+      <h2 class="section-title">Emotional patterns you'd never notice yourself.</h2>
+      <p class="section-body" style="max-width:560px">AI detects tone in every entry. See what weeks went great, when stress crept in, and what correlates with your best days.</p>
+      <div class="mood-bars">
+        <div class="mbar great" style="height:85%"></div><div class="mbar good" style="height:70%"></div>
+        <div class="mbar good" style="height:75%"></div><div class="mbar meh" style="height:45%"></div>
+        <div class="mbar rough" style="height:30%"></div><div class="mbar rough" style="height:25%"></div>
+        <div class="mbar meh" style="height:50%"></div><div class="mbar good" style="height:65%"></div>
+        <div class="mbar great" style="height:90%"></div><div class="mbar great" style="height:80%"></div>
+        <div class="mbar good" style="height:72%"></div><div class="mbar great" style="height:88%"></div>
+        <div class="mbar meh" style="height:40%"></div><div class="mbar good" style="height:68%"></div>
+        <div class="mbar great" style="height:92%"></div><div class="mbar good" style="height:76%"></div>
+        <div class="mbar meh" style="height:48%"></div><div class="mbar rough" style="height:28%"></div>
+        <div class="mbar good" style="height:62%"></div><div class="mbar great" style="height:84%"></div>
+        <div class="mbar great" style="height:95%"></div><div class="mbar good" style="height:73%"></div>
+        <div class="mbar good" style="height:69%"></div><div class="mbar great" style="height:87%"></div>
+        <div class="mbar meh" style="height:44%"></div><div class="mbar rough" style="height:32%"></div>
+        <div class="mbar good" style="height:66%"></div><div class="mbar great" style="height:91%"></div>
+      </div>
+      <div class="mood-legend">
+        <div class="ml"><div class="ml-dot" style="background:#27c93f"></div>Great</div>
+        <div class="ml"><div class="ml-dot" style="background:#4a9eff"></div>Good</div>
+        <div class="ml"><div class="ml-dot" style="background:#ffbd2e"></div>Meh</div>
+        <div class="ml"><div class="ml-dot" style="background:#ff4d00"></div>Rough</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRICING -->
+  <div class="pricing fade-in" id="pricing">
+    <div class="section-label">Pricing</div>
+    <h2 class="section-title">Start free. Stay honest.</h2>
+    <p class="section-body" style="margin:0 auto;max-width:380px">No paywalled basics. Pay when the memory layer actually changes how you think.</p>
+    <div class="pcards">
+      <div class="pcard">
+        <div class="pbadge">Free</div>
+        <div class="pname">Write</div>
+        <div class="pprice">₹0 <span>/ forever</span></div>
+        <p class="pdesc">The best journaling is the kind you actually do.</p>
+        <ul class="pfeats">
+          <li>Unlimited entries</li><li>Image attachments</li>
+          <li>Timeline + Calendar</li><li>Basic search</li><li>Export anytime</li>
+        </ul>
+        <a href="#" class="pbtn ghost">Start writing</a>
+      </div>
+      <div class="pcard featured">
+        <div class="pbadge">Most popular</div>
+        <div class="pname">Memory</div>
+        <div class="pprice">₹299 <span>/ month</span></div>
+        <p class="pdesc">Your journal starts understanding you.</p>
+        <ul class="pfeats">
+          <li>Everything in Free</li><li>AI memory layer</li>
+          <li>Ask your journal</li><li>Semantic search</li>
+          <li>Weekly + monthly reviews</li><li>Mood timeline</li><li>Goal & idea tracking</li>
+        </ul>
+        <a href="#" class="pbtn primary">Get Memory</a>
+      </div>
+      <div class="pcard">
+        <div class="pbadge">Coming soon</div>
+        <div class="pname">Intelligence</div>
+        <div class="pprice">₹599 <span>/ month</span></div>
+        <p class="pdesc">Pattern detection, nightly AI, full privacy.</p>
+        <ul class="pfeats">
+          <li>Everything in Memory</li><li>Pattern detection</li>
+          <li>Nightly AI processing</li><li>Quarterly + annual reviews</li>
+          <li>Memory graph</li><li>Local AI model support</li>
+        </ul>
+        <a href="#" class="pbtn ghost">Join waitlist</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta fade-in">
+    <h2>Stop losing yourself<br>to the scroll.</h2>
+    <p>Your thoughts deserve better than a Notes app.</p>
+    <a href="#" class="btn-white">Start for free — no card needed</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">🤬 rant</div>
+    <ul class="footer-links">
+      <li><a href="#">Privacy</a></li>
+      <li><a href="#">Terms</a></li>
+      <li><a href="#">Twitter</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </footer>
+
+</div>
+
+<script>
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold:0.08, rootMargin:'0px 0px -30px 0px' });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
