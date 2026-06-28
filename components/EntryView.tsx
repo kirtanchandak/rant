@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { useRouter } from 'next/navigation'
 import { deleteEntry } from '@/app/actions/entries'
 import { InlineEditor } from '@/components/InlineEditor'
@@ -8,6 +9,77 @@ import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
 import { Pencil, Trash2, Loader2, X } from 'lucide-react'
 import type { Entry } from '@/types'
+
+function Lightbox({ url, onClose }: { url: string; onClose: () => void }) {
+  // Escape key to close
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [onClose])
+
+  // Render into document.body via portal to escape all layout containers
+  return createPortal(
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 9999,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(0,0,0,0.88)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        padding: '1rem',
+        cursor: 'pointer',
+      }}
+      onClick={onClose}
+    >
+      {/* Close button — always in the true top-right corner of the screen */}
+      <button
+        onClick={onClose}
+        style={{
+          position: 'fixed',
+          top: '1rem',
+          right: '1rem',
+          zIndex: 10000,
+          padding: '0.5rem',
+          borderRadius: '9999px',
+          background: 'rgba(255,255,255,0.12)',
+          border: '1px solid rgba(255,255,255,0.15)',
+          color: 'white',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backdropFilter: 'blur(8px)',
+        }}
+        aria-label="Close image"
+      >
+        <X size={20} />
+      </button>
+
+      {/* Image — click does NOT close */}
+      <img
+        src={url}
+        alt="Full size image"
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          maxWidth: '90vw',
+          maxHeight: '90dvh',
+          objectFit: 'contain',
+          borderRadius: '1rem',
+          boxShadow: '0 25px 60px rgba(0,0,0,0.6)',
+          cursor: 'default',
+        }}
+      />
+    </div>,
+    document.body
+  )
+}
 
 export function EntryView({ entry, startEditing }: { entry: Entry; startEditing: boolean }) {
   const [editing, setEditing] = useState(startEditing)
@@ -108,26 +180,9 @@ export function EntryView({ entry, startEditing }: { entry: Entry; startEditing:
         </div>
       )}
 
-      {/* Lightbox Modal */}
+      {/* Lightbox — rendered into document.body via portal */}
       {lightboxUrl && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in p-4 cursor-pointer"
-          onClick={() => setLightboxUrl(null)}
-        >
-          <div className="relative max-w-4xl max-h-[90dvh] overflow-hidden rounded-2xl border border-white/10 shadow-2xl">
-            <img
-              src={lightboxUrl}
-              alt="Lightbox view"
-              className="max-w-full max-h-[90dvh] object-contain"
-            />
-            <button
-              onClick={() => setLightboxUrl(null)}
-              className="absolute top-4 right-4 p-2 rounded-full bg-black/40 text-white/80 hover:text-white backdrop-blur-md transition hover:bg-black/60"
-            >
-              <X className="size-5" />
-            </button>
-          </div>
-        </div>
+        <Lightbox url={lightboxUrl} onClose={() => setLightboxUrl(null)} />
       )}
     </div>
   )
