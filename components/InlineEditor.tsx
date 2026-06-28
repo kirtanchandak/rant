@@ -65,6 +65,13 @@ export function InlineEditor({
     const files = e.target.files
     if (!files || files.length === 0) return
 
+    // Limit check: total images cannot exceed 5
+    if (images.length + files.length > 5) {
+      toast.error('You can only attach up to 5 images per entry.')
+      if (fileInputRef.current) fileInputRef.current.value = ''
+      return
+    }
+
     setIsUploading(true)
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
@@ -79,6 +86,14 @@ export function InlineEditor({
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i]
+
+      // Limit check: individual file size cannot exceed 5MB
+      const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+      if (file.size > MAX_FILE_SIZE) {
+        toast.error(`"${file.name}" is larger than 5MB and was skipped.`)
+        continue
+      }
+
       try {
         // Compress client-side if exceeds 500KB
         const processedFile = await compressImage(file)
