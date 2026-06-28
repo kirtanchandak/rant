@@ -4,6 +4,7 @@ export type Entry = {
   content: string
   created_at: string
   updated_at: string
+  images?: string[]
 }
 
 export type User = {

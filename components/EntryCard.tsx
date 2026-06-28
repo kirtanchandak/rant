@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useTransition } from 'react'
 import { deleteEntry } from '@/app/actions/entries'
 import { toast } from 'sonner'
-import { Pencil, Trash2, Clock } from 'lucide-react'
+import { Pencil, Trash2, Clock, Image as ImageIcon } from 'lucide-react'
 import type { Entry } from '@/types'
 
 function formatTime(dateStr: string) {
@@ -22,6 +22,7 @@ function getPreview(content: string, maxChars = 200) {
 
 export function EntryCard({ entry }: { entry: Entry }) {
   const [isPending, startTransition] = useTransition()
+  const hasImages = entry.images && entry.images.length > 0
 
   const handleDelete = () => {
     if (!confirm('Delete this entry?')) return
@@ -44,15 +45,33 @@ export function EntryCard({ entry }: { entry: Entry }) {
         <Link
           href={`/entries/${entry.id}`}
           id={`entry-${entry.id}`}
-          className="flex-1 min-w-0 space-y-1.5 hover:opacity-75 transition-opacity"
+          className="flex-1 min-w-0 flex items-start gap-4 hover:opacity-75 transition-opacity"
         >
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-            <Clock className="size-3 shrink-0" strokeWidth={2} />
-            {formatTime(entry.created_at)}
+          <div className="flex-1 min-w-0 space-y-1.5">
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <Clock className="size-3 shrink-0" strokeWidth={2} />
+              {formatTime(entry.created_at)}
+              {hasImages && (
+                <span className="flex items-center gap-1 ml-1 text-[10px] bg-secondary px-1.5 py-0.5 rounded-full text-foreground/75 font-medium">
+                  <ImageIcon className="size-2.5" />
+                  {entry.images!.length}
+                </span>
+              )}
+            </div>
+            <p className="text-sm text-foreground/80 leading-relaxed line-clamp-4 whitespace-pre-wrap break-words">
+              {getPreview(entry.content)}
+            </p>
           </div>
-          <p className="text-sm text-foreground/80 leading-relaxed line-clamp-4 whitespace-pre-wrap break-words">
-            {getPreview(entry.content)}
-          </p>
+
+          {hasImages && (
+            <div className="size-14 rounded-lg overflow-hidden border border-border shrink-0 bg-secondary/30 mt-1">
+              <img
+                src={entry.images![0]}
+                alt="Entry thumbnail"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          )}
         </Link>
 
         {/* Actions — show on hover */}
