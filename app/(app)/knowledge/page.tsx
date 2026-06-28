@@ -30,7 +30,7 @@ const STATUS_LABEL: Record<string, string> = {
 export default async function KnowledgePage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  if (!user) redirect('/')
 
   const { data: memories } = await supabase
     .from('memories')

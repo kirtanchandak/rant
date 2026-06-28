@@ -19,14 +19,22 @@ export default async function LandingPage() {
         <Link href="/" className={`text-xl ${dmSerif.className} text-foreground flex items-center gap-2`}>
           <span className="text-2xl">🍻</span> rant
         </Link>
-        <div className="flex items-center gap-2 sm:gap-4">
+        <div className="flex items-center gap-3 sm:gap-5">
           <ul className="hidden md:flex items-center gap-6 list-none">
             <li><a href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Features</a></li>
             <li><a href="#ask" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Ask your journal</a></li>
           </ul>
           <ThemeToggle />
+          {!isLoggedIn && (
+            <Link 
+              href="/login" 
+              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
+            >
+              Log in
+            </Link>
+          )}
           <Link
-            href={isLoggedIn ? "/write" : "/login"}
+            href={isLoggedIn ? "/write" : "/login?mode=signup"}
             className="px-3.5 py-1.5 sm:px-4 sm:py-2 bg-foreground text-background text-sm font-medium rounded-lg hover:opacity-90 transition-opacity whitespace-nowrap"
           >
             {isLoggedIn ? "Go to app" : "Start free"}

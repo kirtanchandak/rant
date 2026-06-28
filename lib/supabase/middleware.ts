@@ -33,17 +33,17 @@ export async function updateSession(request: NextRequest) {
 
   // Protect app routes
   const pathname = request.nextUrl.pathname
-  const isAuthRoute = pathname.startsWith('/login') || pathname.startsWith('/auth')
+  const isPublicRoute = pathname === '/' || pathname.startsWith('/login') || pathname.startsWith('/auth')
 
-  if (!user && !isAuthRoute) {
+  if (!user && !isPublicRoute) {
     const url = request.nextUrl.clone()
-    url.pathname = '/login'
+    url.pathname = '/'
     return NextResponse.redirect(url)
   }
 
   if (user && pathname === '/login') {
     const url = request.nextUrl.clone()
-    url.pathname = '/'
+    url.pathname = '/write'
     return NextResponse.redirect(url)
   }
 
