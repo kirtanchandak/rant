@@ -13,13 +13,17 @@ import {
   LogOut,
   Menu,
   X,
+  Network,
+  Images,
 } from 'lucide-react'
 
 const navLinks = [
-  { href: '/write',          label: 'Write',    icon: PenLine,      key: 'write' },
-  { href: '/timeline',  label: 'Timeline', icon: ScrollText,   key: 'timeline' },
-  { href: '/calendar',  label: 'Calendar', icon: CalendarDays, key: 'calendar' },
-  { href: '/search',    label: 'Search',   icon: Search,       key: 'search' },
+  { href: '/write',      label: 'Write',     icon: PenLine,      key: 'write' },
+  { href: '/timeline',   label: 'Timeline',  icon: ScrollText,   key: 'timeline' },
+  { href: '/calendar',   label: 'Calendar',  icon: CalendarDays, key: 'calendar' },
+  { href: '/images',     label: 'Images',    icon: Images,       key: 'images' },
+  { href: '/knowledge',  label: 'Knowledge', icon: Network,      key: 'knowledge' },
+  { href: '/search',     label: 'Search',    icon: Search,       key: 'search' },
 ]
 
 
