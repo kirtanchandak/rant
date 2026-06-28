@@ -36,7 +36,17 @@ export function EntryEditor({ greeting }: { greeting: string }) {
       
       startTransition(async () => {
         try {
-          await createEntry(text.trim(), currentImages)
+          const newEntryId = await createEntry(text.trim(), currentImages)
+          
+          if (newEntryId) {
+            // Trigger knowledge extraction in the background
+            fetch('/api/knowledge/process', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ journalEntryId: newEntryId })
+            }).catch(console.error)
+          }
+
           lastSavedRef.current = text
           setContent('')
           setImages([]) // clear images on successful save

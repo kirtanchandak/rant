@@ -9,15 +9,19 @@ export async function createEntry(content: string, images: string[] = []) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Unauthorized')
 
-  const { error } = await supabase
+  const { data: newEntry, error } = await supabase
     .from('entries')
     .insert({ content, user_id: user.id, images })
+    .select('id')
+    .single()
 
   if (error) throw new Error(error.message)
 
   revalidatePath('/')
   revalidatePath('/timeline')
   revalidatePath('/calendar')
+  
+  return newEntry.id
 }
 
 export async function updateEntry(id: string, content: string, images?: string[]) {
