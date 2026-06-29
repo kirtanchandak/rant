@@ -36,16 +36,7 @@ export function EntryEditor({ greeting }: { greeting: string }) {
       
       startTransition(async () => {
         try {
-          const newEntryId = await createEntry(text.trim(), currentImages)
-          
-          if (newEntryId) {
-            // Trigger knowledge extraction in the background
-            fetch('/api/knowledge/process', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ journalEntryId: newEntryId })
-            }).catch(console.error)
-          }
+          await createEntry(text.trim(), currentImages)
 
           lastSavedRef.current = text
           setContent('')

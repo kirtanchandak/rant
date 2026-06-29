@@ -8,6 +8,7 @@ create table if not exists entries (
   id         uuid primary key default gen_random_uuid(),
   user_id    uuid references auth.users(id) on delete cascade not null,
   content    text not null default '',
+  processed  boolean default false not null,
   created_at timestamptz default now() not null,
   updated_at timestamptz default now() not null
 );
