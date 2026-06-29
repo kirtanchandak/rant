@@ -60,15 +60,13 @@ export function InlineEditor({
     if (e.key === 'Escape') onCancel()
   }
 
-  // Handle image upload and compression
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
-    if (!files || files.length === 0) return
+  const uploadFiles = async (files: File[] | FileList) => {
+    const fileList = Array.from(files)
+    if (fileList.length === 0) return
 
     // Limit check: total images cannot exceed 5
-    if (images.length + files.length > 5) {
+    if (images.length + fileList.length > 5) {
       toast.error('You can only attach up to 5 images per entry.')
-      if (fileInputRef.current) fileInputRef.current.value = ''
       return
     }
 
@@ -84,9 +82,7 @@ export function InlineEditor({
 
     const uploadedUrls: string[] = []
 
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i]
-
+    for (const file of fileList) {
       // Limit check: individual file size cannot exceed 5MB
       const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
       if (file.size > MAX_FILE_SIZE) {
@@ -95,7 +91,7 @@ export function InlineEditor({
       }
 
       try {
-        // Compress client-side if exceeds 500KB
+        // Compress client-side if exceeds 500KB (and is not a GIF)
         const processedFile = await compressImage(file)
         
         // Unique filename
@@ -126,7 +122,36 @@ export function InlineEditor({
 
     setImages((prev) => [...prev, ...uploadedUrls])
     setIsUploading(false)
+  }
+
+  // Handle image upload and compression
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      await uploadFiles(e.target.files)
+    }
     if (fileInputRef.current) fileInputRef.current.value = ''
+  }
+
+  // Handle image paste from keyboard/clipboard
+  const handlePaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    const items = e.clipboardData?.items
+    if (!items) return
+
+    const filesToUpload: File[] = []
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i]
+      if (item.type.startsWith('image/')) {
+        const file = item.getAsFile()
+        if (file) {
+          filesToUpload.push(file)
+        }
+      }
+    }
+
+    if (filesToUpload.length > 0) {
+      e.preventDefault() // Prevent pasting filename strings or binary text
+      await uploadFiles(filesToUpload)
+    }
   }
 
   // Remove attached image
@@ -147,6 +172,7 @@ export function InlineEditor({
           }
         }}
         onKeyDown={handleKeyDown}
+        onPaste={handlePaste}
         className="rant-textarea"
         style={{ minHeight: '60px' }}
         disabled={isPending}

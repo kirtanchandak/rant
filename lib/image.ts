@@ -5,6 +5,10 @@
 export async function compressImage(file: File): Promise<File | Blob> {
   const MAX_SIZE_BYTES = 500 * 1024 // 500 KB
   
+  if (file.type === 'image/gif') {
+    return file // Do not compress GIFs to preserve animation
+  }
+
   if (file.size <= MAX_SIZE_BYTES) {
     return file // Return unchanged if already under 500KB
   }
