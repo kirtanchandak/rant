@@ -120,7 +120,9 @@ export function InlineEditor({
       }
     }
 
-    setImages((prev) => [...prev, ...uploadedUrls])
+    if (uploadedUrls.length > 0) {
+      setImages((prev) => [...prev, ...uploadedUrls])
+    }
     setIsUploading(false)
   }
 

@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useRef, useEffect, useCallback, useTransition } from 'react'
-import { createEntry } from '@/app/actions/entries'
+import { createEntry, updateEntry } from '@/app/actions/entries'
 import { toast } from 'sonner'
-import { Save, Loader2, Paperclip, X, Image as ImageIcon } from 'lucide-react'
+import { Save, Loader2, Paperclip, X } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { compressImage } from '@/lib/image'
 
@@ -30,21 +30,34 @@ export function EntryEditor({ greeting }: { greeting: string }) {
     ta.style.height = `${Math.max(ta.scrollHeight, 120)}px`
   }, [content])
 
+  const activeEntryIdRef = useRef<string | null>(null)
+
   const handleSave = useCallback(
-    (text: string, currentImages: string[]) => {
+    (text: string, currentImages: string[], isAutosave = false) => {
       if (!text.trim() || isPending) return
       
       startTransition(async () => {
         try {
-          await createEntry(text.trim(), currentImages)
+          if (activeEntryIdRef.current) {
+            await updateEntry(activeEntryIdRef.current, text.trim(), currentImages)
+          } else {
+            const newId = await createEntry(text.trim(), currentImages)
+            activeEntryIdRef.current = newId
+          }
 
           lastSavedRef.current = text
-          setContent('')
-          setImages([]) // clear images on successful save
-          if (textareaRef.current) {
-            textareaRef.current.style.height = '120px'
+
+          if (!isAutosave) {
+            setContent('')
+            setImages([]) // clear images on successful save
+            activeEntryIdRef.current = null
+            if (textareaRef.current) {
+              textareaRef.current.style.height = '120px'
+            }
+            toast.success('Entry saved ✓')
+          } else {
+            toast.success('Draft autosaved', { id: 'autosave' })
           }
-          toast.success('Entry saved ✓')
         } catch {
           toast.error('Failed to save. Try again.')
         }
@@ -55,16 +68,16 @@ export function EntryEditor({ greeting }: { greeting: string }) {
 
   // Autosave after 5s of inactivity
   useEffect(() => {
-    if (!content.trim() || content === lastSavedRef.current) return
+    if (!content.trim() || content === lastSavedRef.current || isUploading) return
     if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current)
     autoSaveTimerRef.current = setTimeout(() => {
       // Autosave captures whatever images are attached at that moment
-      handleSave(content, images)
+      handleSave(content, images, true)
     }, 5000)
     return () => {
       if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current)
     }
-  }, [content, images, handleSave])
+  }, [content, images, isUploading, handleSave])
 
   // Cmd/Ctrl + Enter to save
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -82,6 +95,12 @@ export function EntryEditor({ greeting }: { greeting: string }) {
     if (images.length + fileList.length > 5) {
       toast.error('You can only attach up to 5 images per entry.')
       return
+    }
+
+    // Clear autosave timer when an upload starts
+    if (autoSaveTimerRef.current) {
+      clearTimeout(autoSaveTimerRef.current)
+      autoSaveTimerRef.current = null
     }
 
     setIsUploading(true)
@@ -134,7 +153,9 @@ export function EntryEditor({ greeting }: { greeting: string }) {
       }
     }
 
-    setImages((prev) => [...prev, ...uploadedUrls])
+    if (uploadedUrls.length > 0) {
+      setImages((prev) => [...prev, ...uploadedUrls])
+    }
     setIsUploading(false)
   }
 
@@ -180,7 +201,7 @@ export function EntryEditor({ greeting }: { greeting: string }) {
       {/* Greeting */}
       <div>
         <h1 className="text-2xl font-semibold text-foreground tracking-tight">{greeting}</h1>
-        <p className="text-muted-foreground mt-1 text-sm">What's on your mind today?</p>
+        <p className="text-muted-foreground mt-1 text-sm">What&apos;s on your mind today?</p>
       </div>
 
       {/* Editor area */}
@@ -257,7 +278,13 @@ export function EntryEditor({ greeting }: { greeting: string }) {
           />
           <button
             type="button"
-            onClick={() => fileInputRef.current?.click()}
+            onClick={() => {
+              if (autoSaveTimerRef.current) {
+                clearTimeout(autoSaveTimerRef.current)
+                autoSaveTimerRef.current = null
+              }
+              fileInputRef.current?.click()
+            }}
             disabled={isPending || isUploading}
             className="flex items-center justify-center p-2 rounded-lg border border-border hover:bg-secondary text-muted-foreground hover:text-foreground transition active:scale-95 disabled:opacity-40"
             title="Attach images"
