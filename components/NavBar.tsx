@@ -15,6 +15,7 @@ import {
   X,
   Network,
   Images,
+  User,
 } from 'lucide-react'
 
 const navLinks = [
@@ -80,10 +81,19 @@ export function NavBar({ userName }: { userName: string }) {
           <ThemeToggle />
 
           {/* Desktop: user + sign out */}
-          <div className="hidden sm:flex items-center gap-1.5">
-            <span className="text-xs text-muted-foreground max-w-[100px] truncate">
-              {userName}
-            </span>
+          <div className="hidden sm:flex items-center gap-1">
+            <Link
+              href="/profile"
+              id="nav-profile"
+              className={`flex items-center gap-1 px-2 py-1.5 rounded-md text-xs transition-colors ${
+                pathname === '/profile'
+                  ? 'text-foreground bg-secondary font-medium'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-secondary/70'
+              }`}
+            >
+              <User className="size-3.5" />
+              <span className="max-w-[80px] truncate">{userName}</span>
+            </Link>
             <button
               id="sign-out-btn"
               onClick={handleSignOut}
@@ -91,7 +101,7 @@ export function NavBar({ userName }: { userName: string }) {
               title="Sign out"
               className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors disabled:opacity-40"
             >
-              <LogOut className="size-3.5" />
+              <LogOut className="size-3.5" strokeWidth={2} />
             </button>
           </div>
 
@@ -130,7 +140,19 @@ export function NavBar({ userName }: { userName: string }) {
             )
           })}
           <div className="pt-2 border-t border-border flex items-center justify-between">
-            <span className="text-xs text-muted-foreground px-3">{userName}</span>
+            <Link
+              href="/profile"
+              id="mobile-nav-profile"
+              onClick={() => setMobileOpen(false)}
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-md text-sm transition-colors ${
+                pathname === '/profile'
+                  ? 'text-foreground bg-secondary font-medium'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-secondary/70'
+              }`}
+            >
+              <User className="size-4" />
+              <span>{userName}</span>
+            </Link>
             <button
               onClick={() => { setMobileOpen(false); handleSignOut() }}
               disabled={isPending}
