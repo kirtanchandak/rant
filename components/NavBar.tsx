@@ -16,6 +16,7 @@ import {
   Network,
   Images,
   User,
+  Sparkles,
 } from 'lucide-react'
 
 const navLinks = [
@@ -24,6 +25,7 @@ const navLinks = [
   { href: '/calendar',   label: 'Calendar',  icon: CalendarDays, key: 'calendar' },
   { href: '/images',     label: 'Images',    icon: Images,       key: 'images' },
   { href: '/knowledge',  label: 'Knowledge', icon: Network,      key: 'knowledge' },
+  { href: '/insights',   label: 'Insights',  icon: Sparkles,     key: 'insights' },
   { href: '/search',     label: 'Search',    icon: Search,       key: 'search' },
 ]
 

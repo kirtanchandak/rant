@@ -63,3 +63,21 @@ export type Relationship = {
   confidence: number
   created_at: string
 }
+
+export type EntryMood = {
+  id: string
+  entry_id: string
+  user_id: string
+  mood_score: number
+  mood_label: string
+  emotions: { emotion: string; intensity: number }[]
+  summary: string
+  created_at: string
+}
+
+export type MoodWithEntry = EntryMood & {
+  entries: {
+    created_at: string
+    content: string
+  }
+}
